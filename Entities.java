@@ -29,6 +29,21 @@ class Entity {
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Entity) {
+            Entity obj1 = (Entity) obj;
+
+            if (x == obj1.x && y == obj1.y)
+                return true;
+            else
+                return false;
+
+        } else
+            return false;
+
+    }
 }
 
 enum Direction {
@@ -45,9 +60,11 @@ class Snake {
         tail = new ArrayList<Entity>();
     }
 
-    public void move(Direction dir) {
+    public void move(Direction dir, boolean appleEat) {
         int prevX = head.getX();
         int prevY = head.getY();
+
+        Entity prevPos = new Entity(prevX, prevY);
 
         switch (dir) {
             case RIGHT:
@@ -65,10 +82,23 @@ class Snake {
             default:
                 break;
         }
-        if (tail.size() > 0) {
-            tail.remove(tail.size() - 1); // + or - 1?
-            tail.add(0, new Entity(prevX, prevY));
+
+        if (appleEat)
+            addTail(prevPos);
+        else
+            moveTail(prevPos);
+    }
+
+    private void moveTail(Entity prev) {
+        int tailLength = tail.size();
+        if (tailLength > 0) {
+            tail.remove(tailLength - 1);
+            addTail(prev);
         }
+    }
+
+    private void addTail(Entity prev) {
+        tail.add(0, prev);
     }
 
     public Entity getHead() {
@@ -82,26 +112,5 @@ class Snake {
     @Override
     public String toString() {
         return "H: " + head.toString() + " -- T: " + tail.toString();
-    }
-}
-
-class Apple {
-    private Entity pos;
-
-    public Apple(int x, int y) {
-        pos = new Entity(x, y);
-    }
-
-    public Entity getPosition() {
-        return pos;
-    }
-
-    public void updatePos(Entity newPos) {
-        pos = newPos;
-    }
-
-    @Override
-    public String toString() {
-        return "A: " + pos.toString();
     }
 }

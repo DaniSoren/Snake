@@ -11,11 +11,11 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Maze m = new Maze(2, 2);
+        Maze m = new Maze(3, 4);
         Direction[][] p = m.getPath();
         Snake s = m.getSnake();
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 20; i++) {
             Direction next = p[s.getHead().getX()][s.getHead().getY()];
             m.update(next);
         }
