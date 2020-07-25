@@ -1,26 +1,25 @@
-import java.util.*;
-
 /**
- * So far, I have created the following:
+ * TODO: 
+ * Collision with head and tail
+ * Command-line functionality
+ * Play on your own without auto control
+ * Prettify code :)
  * 
- * Function to print the map based on the map's situation (snake head, snake tail, apple and empty spaces).
- * Snake class that stores a position and is able to move up, down, left or right and update the tail correspondingly.
- * Apple class.
+ * Optional: Add path for odd m and n
  */
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Maze m = new Maze(3, 4);
-        Direction[][] p = m.getPath();
-        Snake s = m.getSnake();
+        Game game = new Game(3, 4);
 
-        for(int i = 0; i < 20; i++) {
-            Direction next = p[s.getHead().getX()][s.getHead().getY()];
-            m.update(next);
+        int ms = 1000;
+
+        while (!game.gameWon()) {
+            Thread.sleep(ms);
+
+            Direction next = game.getNextMove();
+            game.update(next);
         }
-
-        //Direction nextDir = p.get(s.getHead());
-        //m.update(nextDir);
     }
 }

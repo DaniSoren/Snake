@@ -25,6 +25,15 @@ class Entity {
         this.y = y;
     }
 
+    public static Entity random(int m, int n) {
+        Random r = new Random();
+        
+        int x = r.nextInt(m);
+        int y = r.nextInt(n);
+
+        return new Entity(x, y);
+    }
+
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
@@ -40,14 +49,10 @@ class Entity {
             else
                 return false;
 
-        } else
+        } else {
             return false;
-
+        }
     }
-}
-
-enum Direction {
-    RIGHT, DOWN, LEFT, UP
 }
 
 class Snake {
@@ -89,16 +94,17 @@ class Snake {
             moveTail(prevPos);
     }
 
-    private void moveTail(Entity prev) {
-        int tailLength = tail.size();
-        if (tailLength > 0) {
-            tail.remove(tailLength - 1);
-            addTail(prev);
-        }
-    }
-
     private void addTail(Entity prev) {
         tail.add(0, prev);
+    }
+
+    private void moveTail(Entity prev) {
+        int length = tail.size();
+
+        if (length > 0) {
+            tail.remove(length - 1);
+            addTail(prev);
+        }
     }
 
     public Entity getHead() {
@@ -111,6 +117,6 @@ class Snake {
 
     @Override
     public String toString() {
-        return "H: " + head.toString() + " -- T: " + tail.toString();
+        return "Head" + head.toString() + "  -  Tail" + tail.toString();
     }
 }
