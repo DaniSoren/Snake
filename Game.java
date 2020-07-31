@@ -19,7 +19,13 @@ public class Game {
 
     public void update(Direction d) {
         snake.move(d, wasAppleJustEaten);
+
+        if (gameLost()) {
+            return;
+        }
+
         updateApple();
+
         print();
     }
 
@@ -35,13 +41,9 @@ public class Game {
                 if (curr.equals(snake.getHead()))
                     isOccupied = true;
 
-                for (Entity e : snake.getTail()) {
-                    int x = e.getX();
-                    int y = e.getY();
-
-                    if (curr.equals(new Entity(x, y)))
+                for (Entity tail : snake.getTail())
+                    if (curr.equals(new Entity(tail.getX(), tail.getY())))
                         isOccupied = true;
-                }
 
                 if (!isOccupied)
                     return false;
@@ -51,10 +53,18 @@ public class Game {
         return true;
     }
 
+    public boolean gameLost() {
+        if (gameWon())
+            return false;
+        else if (isSnakeCollided())
+            return true;
+
+        return false;
+    }
+
     private void print() {
         int m = maze.getWidth();
         int n = maze.getLength();
-
         for (int j = n - 1; j >= 0; j--) {
             for (int i = 0; i < m; i++) {
                 Entity curr = new Entity(i, j);
@@ -65,20 +75,15 @@ public class Game {
                     System.out.print("A");
                 else {
                     boolean hasPrinted = false;
-                    
-                    for (Entity e : snake.getTail()) {
-                        int x = e.getX();
-                        int y = e.getY();
 
-                        if (curr.equals(new Entity(x, y))) {
+                    for (Entity tail : snake.getTail())
+                        if (curr.equals(new Entity(tail.getX(), tail.getY()))) {
                             System.out.print("T");
                             hasPrinted = true;
                         }
-                    }
 
-                    if (!hasPrinted) {
+                    if (!hasPrinted)
                         System.out.print("X");
-                    }
                 }
             }
             System.out.println();
@@ -128,6 +133,33 @@ public class Game {
         }
 
         return isLegal;
+    }
+
+    private boolean isSnakeCollided() {
+        Entity head = snake.getHead();
+        int x = head.getX();
+        int y = head.getY();
+
+        int m = maze.getWidth();
+        int n = maze.getLength();
+
+        if (x < 0 || y < 0 || x >= m || y >= n) {
+            return true;
+        }
+
+        for (Entity t : snake.getTail()) {
+            if (head.equals(t)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void reset() {
+        snake.reset();
+        updateApple();
+        wasAppleJustEaten = false;
     }
 
     public Direction getNextMove() {

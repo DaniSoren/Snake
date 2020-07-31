@@ -107,6 +107,12 @@ class Snake {
         }
     }
 
+    public void reset() {
+        head.setX(0);
+        head.setY(0);
+        tail.clear();
+    }
+
     public Entity getHead() {
         return head;
     }
