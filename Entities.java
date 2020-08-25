@@ -25,13 +25,23 @@ class Entity {
         this.y = y;
     }
 
+    public void translate(int x, int y) {
+        this.x += x;
+        this.y += y;
+    }
+
     public static Entity random(int m, int n) {
         Random r = new Random();
-        
+
         int x = r.nextInt(m);
         int y = r.nextInt(n);
 
         return new Entity(x, y);
+    }
+
+    public void reset() {
+        x = 0;
+        y = 0;
     }
 
     @Override
@@ -55,6 +65,10 @@ class Entity {
     }
 }
 
+enum Direction {
+    RIGHT, DOWN, LEFT, UP
+}
+
 class Snake {
 
     private Entity head;
@@ -66,50 +80,47 @@ class Snake {
     }
 
     public void move(Direction dir, boolean appleEat) {
-        int prevX = head.getX();
-        int prevY = head.getY();
+        Entity prevPos = new Entity(head.getX(), head.getY());
+        moveHead(dir);
+        moveTail(prevPos, appleEat);
+    }
 
-        Entity prevPos = new Entity(prevX, prevY);
-
+    private void moveHead(Direction dir) {
         switch (dir) {
             case RIGHT:
-                head.setX(prevX + 1);
+                head.translate(1, 0);
                 break;
             case DOWN:
-                head.setY(prevY - 1);
+                head.translate(0, -1);
                 break;
             case LEFT:
-                head.setX(prevX - 1);
+                head.translate(-1, 0);
                 break;
             case UP:
-                head.setY(prevY + 1);
+                head.translate(0, 1);
                 break;
             default:
                 break;
         }
-
-        if (appleEat)
-            addTail(prevPos);
-        else
-            moveTail(prevPos);
     }
 
     private void addTail(Entity prev) {
         tail.add(0, prev);
     }
 
-    private void moveTail(Entity prev) {
-        int length = tail.size();
+    private void moveTail(Entity prev, boolean appleEat) {
+        if(!appleEat) {
+            int length = tail.size();
 
-        if (length > 0) {
-            tail.remove(length - 1);
-            addTail(prev);
+            if(length > 0)
+                tail.remove(length - 1);
         }
+        
+        addTail(prev);
     }
 
     public void reset() {
-        head.setX(0);
-        head.setY(0);
+        head.reset();
         tail.clear();
     }
 

@@ -20,10 +20,9 @@ public class Game {
     public void update(Direction d) {
         snake.move(d, wasAppleJustEaten);
 
-        if (gameLost()) {
+        if (gameLost())
             return;
-        }
-
+        
         updateApple();
 
         print();

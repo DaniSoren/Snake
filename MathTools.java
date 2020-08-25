@@ -4,7 +4,3 @@ class MathTools {
         return n % 2 == 0;
     }
 }
-
-enum Direction {
-    RIGHT, DOWN, LEFT, UP
-}

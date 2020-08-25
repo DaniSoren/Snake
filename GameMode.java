@@ -22,10 +22,10 @@ public class GameMode {
             case SOLO:
                 soloPlay();
                 break;
-
             default:
                 break;
         }
+        
         game.reset();
     }
 
@@ -59,5 +59,6 @@ public class GameMode {
                     break;
             }
         }
+        sc.close();
     }
 }
